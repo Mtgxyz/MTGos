@@ -1,0 +1,23 @@
+FIRM-format
+The FIRM format is the format the kernel is linked to. It consists out of up to four segments and up to 14 entry points (Only up to two supported for now).
+0x000-0x003: Magic "FIRM"
+0x004-0x007: Version number. Currently 1
+0x008-0x00B: Main entrypoint (Main CPU)
+0x00C-0x00F: Secondary entrypoint (Secondary CPU (e.g. ARM9 on 3DS/Wii))
+0x010-0x03F: Entrypoints the other cores of the main CPU (currently unused; 0 means: "Do not start")
+0x040-0x0FF: Section headers
+0x100-0x1FF: If you're crazy, put RSA-2048 signature of the 4 SHA-256 hashes here.
+
+Section header format:
+0x00-0x03: Sector offset
+0x04-0x07: Load address (Physical)
+0x08-0x0B: Size (bytes) If this section doesn't exist, then the size will be 0
+0x0C-0x0F: Unused
+0x10-0x2F: SHA-256 hash of the section
+
+
+Section contents:
+0: code
+1: data
+2: code
+3: data
