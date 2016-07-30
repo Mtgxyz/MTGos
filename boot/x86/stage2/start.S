@@ -1,5 +1,5 @@
-org 0x0000
 bits 16
+section .init_text
 start:
     mov ax, 0x1000 ; update segment registers
     mov ds, ax
@@ -13,27 +13,10 @@ start:
     mov si, unrealstart
     call putstr
     cli
-    push ds
-    lgdt [gdtinfo]
-    mov eax, cr0
-    or al, 1
-    mov cr0, eax ;Activate pmode
-bits 32
-    jmp $+2 ;Pls don't crash 386/486
-    mov bx, 0x08
-    mov ds, bx
-    and al, 0xFE
-    mov cr0, eax ; Turn off pmode
-bits 16
-    pop ds
-    sti
-    mov ax, 0
-    mov fs, ax
-    mov bx, 0x0f01
-    mov eax, 0x0B8000
-    mov word [fs:eax], bx
     mov si, smiley
     call putstr
+extern main
+    call main
     jmp $
 bootmsg db "Loaded MTGosloader. Checking for any open A20 gates...",13,10,0
 a20open db "It seems that A20 is already activated... Weird",13,10,0
@@ -45,6 +28,19 @@ a20success db "Successfully opened the A20 gate!",13,10,0
 unrealstart db "Trying to init unreal mode",13,10,0
 smiley db "Do you see a smiley in the top-left corner?",13,10,0
 bootdrv db 0
+global putstring
+
+putstring:
+    push bp
+    mov bp, sp
+    push si
+    push bx
+    mov si, [bp+4]
+    call putstr
+    pop bx
+    pop si
+    pop bp
+    ret
 putstr:
     lodsb
     or al, al
@@ -193,6 +189,8 @@ gdtinfo:
    dd gdt                 ;start of table
  
 gdt         dd 0,0        ; entry 0 is always unused
+flatcode    db 0xff, 0xff, 0, 0, 0, 10011010b, 10001111b, 0
 flatdesc    db 0xff, 0xff, 0, 0, 0, 10010010b, 11001111b, 0
 gdt_end:
-times 5120-($-$$) hlt
+section .end
+times 512 hlt
