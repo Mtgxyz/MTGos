@@ -1,0 +1,16 @@
+MTGos is loaded by FIRMloader. FIRMloader is loaded by one of the following:
+- GRUB on x86(_64)
+- arm9loaderhax on 3DS
+- The bootloader on pi*
+what it does:
+1. Load /mtgos.frm from the root of the boot drive
+2. Load essential MTGos modules into RAM
+3. Jump to the kernel with a pointer to the module table
+4. ???
+5. Profit!
+
+boot Memory map:
+The first megabyte of the RAM of the CPU that the bootloader's run from is reserved from the bootloader. It looks like this:
+0x00000-0x00FFF: Module table (1024 entries)
+0x01000-0x6FFFF: Modules
+0x70000-0x7FFFF: Module config

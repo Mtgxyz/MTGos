@@ -1,0 +1,30 @@
+arch = x86
+MODE = debug
+export PATH := $(HOME)/opt/bin:$(PATH)
+ifeq ($(arch),x86)
+  PREFIX = i686-mtgos-
+  libpath = i686-mtgos
+  ARCHFLAGS = -m32
+else
+  ifeq ($(arch),x86_64)
+    PREFIX = x86_64-elf-
+    libpath = x86_64-elf
+    ARCHFLAGS = -m64
+  else
+    ifeq ($(arch),3ds)
+      PREFIX = arm-none-eabi-
+      libpath = arm-none-eabi
+      ARCHFLAGS = -m32
+    endif
+  endif
+endif
+
+ifeq ($(MODE),debug)
+  CFLAGS := -g3 -DDEBUG
+  CPPFLAGS := -g3 -DDEBUG
+else
+  CFLAGS := -O2
+  CPPFLAGS := -O2
+endif
+CFLAGS += $(ARCHFLAGS)
+CPPFLAGS += $(ARCHFLAGS)

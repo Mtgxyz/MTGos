@@ -1,0 +1,76 @@
+\hypertarget{struct_f_i_r_m__header}{}\section{F\+I\+R\+M\+\_\+header Struct Reference}
+\label{struct_f_i_r_m__header}\index{F\+I\+R\+M\+\_\+header@{F\+I\+R\+M\+\_\+header}}
+
+
+Contains the first sector of every F\+I\+R\+M file.  
+
+
+
+
+Collaboration diagram for F\+I\+R\+M\+\_\+header\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=164pt]{struct_f_i_r_m__header__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+char \hyperlink{struct_f_i_r_m__header_a2d27c5c398bee211d2410fbdbaa5a05e}{magic} \mbox{[}4\mbox{]}
+\item 
+int \hyperlink{struct_f_i_r_m__header_a3a3ccecb2f6348d0071ce98d102e8a22}{version}
+\begin{DoxyCompactList}\small\item\em Magic \char`\"{}\+F\+I\+R\+M\char`\"{} string (not-\/null terminated) \end{DoxyCompactList}\item 
+void($\ast$ \hyperlink{struct_f_i_r_m__header_ad1612a664851fdd7f9ca671af2bfc431}{entrypoint} )()
+\begin{DoxyCompactList}\small\item\em Version. Currently 1. \end{DoxyCompactList}\item 
+unsigned int \hyperlink{struct_f_i_r_m__header_adc471470dba61f85b71e72ee4d84d73e}{reserved} \mbox{[}0x\+D\mbox{]}
+\begin{DoxyCompactList}\small\item\em Address where the processor jumps to after loading. \end{DoxyCompactList}\item 
+struct \hyperlink{struct_f_i_r_m__sect}{F\+I\+R\+M\+\_\+sect} \hyperlink{struct_f_i_r_m__header_a685b6a1c1a0cfb8fb0f1dfcba06b9741}{sections} \mbox{[}4\mbox{]}
+\item 
+unsigned char \hyperlink{struct_f_i_r_m__header_a7be52a7b7994c1013d02e2e9e523316b}{R\+S\+A2048} \mbox{[}0x100\mbox{]}
+\begin{DoxyCompactList}\small\item\em The four internal sections. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Contains the first sector of every F\+I\+R\+M file. 
+
+\subsection{Member Data Documentation}
+\hypertarget{struct_f_i_r_m__header_ad1612a664851fdd7f9ca671af2bfc431}{}\index{F\+I\+R\+M\+\_\+header@{F\+I\+R\+M\+\_\+header}!entrypoint@{entrypoint}}
+\index{entrypoint@{entrypoint}!F\+I\+R\+M\+\_\+header@{F\+I\+R\+M\+\_\+header}}
+\subsubsection[{entrypoint}]{\setlength{\rightskip}{0pt plus 5cm}void($\ast$ F\+I\+R\+M\+\_\+header\+::entrypoint) ()}\label{struct_f_i_r_m__header_ad1612a664851fdd7f9ca671af2bfc431}
+
+
+Version. Currently 1. 
+
+\hypertarget{struct_f_i_r_m__header_a2d27c5c398bee211d2410fbdbaa5a05e}{}\index{F\+I\+R\+M\+\_\+header@{F\+I\+R\+M\+\_\+header}!magic@{magic}}
+\index{magic@{magic}!F\+I\+R\+M\+\_\+header@{F\+I\+R\+M\+\_\+header}}
+\subsubsection[{magic}]{\setlength{\rightskip}{0pt plus 5cm}char F\+I\+R\+M\+\_\+header\+::magic\mbox{[}4\mbox{]}}\label{struct_f_i_r_m__header_a2d27c5c398bee211d2410fbdbaa5a05e}
+\hypertarget{struct_f_i_r_m__header_adc471470dba61f85b71e72ee4d84d73e}{}\index{F\+I\+R\+M\+\_\+header@{F\+I\+R\+M\+\_\+header}!reserved@{reserved}}
+\index{reserved@{reserved}!F\+I\+R\+M\+\_\+header@{F\+I\+R\+M\+\_\+header}}
+\subsubsection[{reserved}]{\setlength{\rightskip}{0pt plus 5cm}unsigned int F\+I\+R\+M\+\_\+header\+::reserved\mbox{[}0x\+D\mbox{]}}\label{struct_f_i_r_m__header_adc471470dba61f85b71e72ee4d84d73e}
+
+
+Address where the processor jumps to after loading. 
+
+\hypertarget{struct_f_i_r_m__header_a7be52a7b7994c1013d02e2e9e523316b}{}\index{F\+I\+R\+M\+\_\+header@{F\+I\+R\+M\+\_\+header}!R\+S\+A2048@{R\+S\+A2048}}
+\index{R\+S\+A2048@{R\+S\+A2048}!F\+I\+R\+M\+\_\+header@{F\+I\+R\+M\+\_\+header}}
+\subsubsection[{R\+S\+A2048}]{\setlength{\rightskip}{0pt plus 5cm}unsigned char F\+I\+R\+M\+\_\+header\+::\+R\+S\+A2048\mbox{[}0x100\mbox{]}}\label{struct_f_i_r_m__header_a7be52a7b7994c1013d02e2e9e523316b}
+
+
+The four internal sections. 
+
+\hypertarget{struct_f_i_r_m__header_a685b6a1c1a0cfb8fb0f1dfcba06b9741}{}\index{F\+I\+R\+M\+\_\+header@{F\+I\+R\+M\+\_\+header}!sections@{sections}}
+\index{sections@{sections}!F\+I\+R\+M\+\_\+header@{F\+I\+R\+M\+\_\+header}}
+\subsubsection[{sections}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf F\+I\+R\+M\+\_\+sect} F\+I\+R\+M\+\_\+header\+::sections\mbox{[}4\mbox{]}}\label{struct_f_i_r_m__header_a685b6a1c1a0cfb8fb0f1dfcba06b9741}
+\hypertarget{struct_f_i_r_m__header_a3a3ccecb2f6348d0071ce98d102e8a22}{}\index{F\+I\+R\+M\+\_\+header@{F\+I\+R\+M\+\_\+header}!version@{version}}
+\index{version@{version}!F\+I\+R\+M\+\_\+header@{F\+I\+R\+M\+\_\+header}}
+\subsubsection[{version}]{\setlength{\rightskip}{0pt plus 5cm}int F\+I\+R\+M\+\_\+header\+::version}\label{struct_f_i_r_m__header_a3a3ccecb2f6348d0071ce98d102e8a22}
+
+
+Magic \char`\"{}\+F\+I\+R\+M\char`\"{} string (not-\/null terminated) 
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+boot/x86/\hyperlink{init_8c}{init.\+c}\end{DoxyCompactItemize}

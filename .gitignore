@@ -1,0 +1,8 @@
+*.o
+loader.bin
+mtgos.firm
+*.mod
+*.img
+*.core
+*.sym
+*.elf

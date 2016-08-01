@@ -1,0 +1,119 @@
+\hypertarget{class_m_t_gos_1_1_base_1_1_output}{}\section{M\+T\+Gos\+:\+:Base\+:\+:Output Class Reference}
+\label{class_m_t_gos_1_1_base_1_1_output}\index{M\+T\+Gos\+::\+Base\+::\+Output@{M\+T\+Gos\+::\+Base\+::\+Output}}
+
+
+\hyperlink{namespace_m_t_gos_1_1_base}{Base} class for output classes.  
+
+
+
+
+{\ttfamily \#include $<$output.\+hpp$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+auto \hyperlink{class_m_t_gos_1_1_base_1_1_output_a484df9ac6db83924c80118154f7088a1}{puts} (const char $\ast$) -\/$>$ void
+\begin{DoxyCompactList}\small\item\em Outputs an generic null-\/terminated A\+S\+C\+I\+I string. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\auto \hyperlink{class_m_t_gos_1_1_base_1_1_output_a6144d124dcb9299c2b95963b8ac7ad54}{operator$<$$<$} (T \&object) -\/$>$ \hyperlink{class_m_t_gos_1_1_base_1_1_output}{Output} \&
+\begin{DoxyCompactList}\small\item\em Outputs an object of any type. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual auto \hyperlink{class_m_t_gos_1_1_base_1_1_output_a9e3a286afa694700d5cf7666cf22d2e8}{put\+Char} (int) -\/$>$ void=0
+\begin{DoxyCompactList}\small\item\em \hyperlink{class_m_t_gos_1_1_base_1_1_output}{Output} of a character (U\+T\+F-\/32) \end{DoxyCompactList}\item 
+auto \hyperlink{class_m_t_gos_1_1_base_1_1_output_a203883edb598ced80d97be427ad07dbe}{put\+Char} (char) -\/$>$ void
+\begin{DoxyCompactList}\small\item\em \hyperlink{class_m_t_gos_1_1_base_1_1_output}{Output} of an A\+S\+C\+I\+I-\/char. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{class_m_t_gos_1_1_base_1_1_output_a1b713f91402dd5c1fa466268fac2e439}{base} =10
+\begin{DoxyCompactList}\small\item\em Contains the base stored for number output. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{namespace_m_t_gos_1_1_base}{Base} class for output classes. 
+
+\subsection{Member Function Documentation}
+\hypertarget{class_m_t_gos_1_1_base_1_1_output_a6144d124dcb9299c2b95963b8ac7ad54}{}\index{M\+T\+Gos\+::\+Base\+::\+Output@{M\+T\+Gos\+::\+Base\+::\+Output}!operator$<$$<$@{operator$<$$<$}}
+\index{operator$<$$<$@{operator$<$$<$}!M\+T\+Gos\+::\+Base\+::\+Output@{M\+T\+Gos\+::\+Base\+::\+Output}}
+\subsubsection[{operator$<$$<$(\+T \&object) -\/$>$ Output \&}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ auto M\+T\+Gos\+::\+Base\+::\+Output\+::operator$<$$<$ (
+\begin{DoxyParamCaption}
+\item[{T \&}]{object}
+\end{DoxyParamCaption}
+) -\/$>$ {\bf Output} \& \hspace{0.3cm}{\ttfamily [inline]}}\label{class_m_t_gos_1_1_base_1_1_output_a6144d124dcb9299c2b95963b8ac7ad54}
+
+
+Outputs an object of any type. 
+
+
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=348pt]{class_m_t_gos_1_1_base_1_1_output_a6144d124dcb9299c2b95963b8ac7ad54_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_m_t_gos_1_1_base_1_1_output_a9e3a286afa694700d5cf7666cf22d2e8}{}\index{M\+T\+Gos\+::\+Base\+::\+Output@{M\+T\+Gos\+::\+Base\+::\+Output}!put\+Char@{put\+Char}}
+\index{put\+Char@{put\+Char}!M\+T\+Gos\+::\+Base\+::\+Output@{M\+T\+Gos\+::\+Base\+::\+Output}}
+\subsubsection[{put\+Char(int) -\/$>$ void=0}]{\setlength{\rightskip}{0pt plus 5cm}virtual auto M\+T\+Gos\+::\+Base\+::\+Output\+::put\+Char (
+\begin{DoxyParamCaption}
+\item[{int}]{}
+\end{DoxyParamCaption}
+) -\/$>$  void\hspace{0.3cm}{\ttfamily [private]}, {\ttfamily [pure virtual]}}\label{class_m_t_gos_1_1_base_1_1_output_a9e3a286afa694700d5cf7666cf22d2e8}
+
+
+\hyperlink{class_m_t_gos_1_1_base_1_1_output}{Output} of a character (U\+T\+F-\/32) 
+
+\hypertarget{class_m_t_gos_1_1_base_1_1_output_a203883edb598ced80d97be427ad07dbe}{}\index{M\+T\+Gos\+::\+Base\+::\+Output@{M\+T\+Gos\+::\+Base\+::\+Output}!put\+Char@{put\+Char}}
+\index{put\+Char@{put\+Char}!M\+T\+Gos\+::\+Base\+::\+Output@{M\+T\+Gos\+::\+Base\+::\+Output}}
+\subsubsection[{put\+Char(char) -\/$>$ void}]{\setlength{\rightskip}{0pt plus 5cm}auto M\+T\+Gos\+::\+Base\+::\+Output\+::put\+Char (
+\begin{DoxyParamCaption}
+\item[{char}]{}
+\end{DoxyParamCaption}
+) -\/$>$  void\hspace{0.3cm}{\ttfamily [private]}}\label{class_m_t_gos_1_1_base_1_1_output_a203883edb598ced80d97be427ad07dbe}
+
+
+\hyperlink{class_m_t_gos_1_1_base_1_1_output}{Output} of an A\+S\+C\+I\+I-\/char. 
+
+\hypertarget{class_m_t_gos_1_1_base_1_1_output_a484df9ac6db83924c80118154f7088a1}{}\index{M\+T\+Gos\+::\+Base\+::\+Output@{M\+T\+Gos\+::\+Base\+::\+Output}!puts@{puts}}
+\index{puts@{puts}!M\+T\+Gos\+::\+Base\+::\+Output@{M\+T\+Gos\+::\+Base\+::\+Output}}
+\subsubsection[{puts(const char $\ast$) -\/$>$ void}]{\setlength{\rightskip}{0pt plus 5cm}auto M\+T\+Gos\+::\+Base\+::\+Output\+::puts (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{}
+\end{DoxyParamCaption}
+) -\/$>$  void}\label{class_m_t_gos_1_1_base_1_1_output_a484df9ac6db83924c80118154f7088a1}
+
+
+Outputs an generic null-\/terminated A\+S\+C\+I\+I string. 
+
+
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=348pt]{class_m_t_gos_1_1_base_1_1_output_a484df9ac6db83924c80118154f7088a1_icgraph}
+\end{center}
+\end{figure}
+
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{class_m_t_gos_1_1_base_1_1_output_a1b713f91402dd5c1fa466268fac2e439}{}\index{M\+T\+Gos\+::\+Base\+::\+Output@{M\+T\+Gos\+::\+Base\+::\+Output}!base@{base}}
+\index{base@{base}!M\+T\+Gos\+::\+Base\+::\+Output@{M\+T\+Gos\+::\+Base\+::\+Output}}
+\subsubsection[{base}]{\setlength{\rightskip}{0pt plus 5cm}int M\+T\+Gos\+::\+Base\+::\+Output\+::base =10\hspace{0.3cm}{\ttfamily [private]}}\label{class_m_t_gos_1_1_base_1_1_output_a1b713f91402dd5c1fa466268fac2e439}
+
+
+Contains the base stored for number output. 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/base/\hyperlink{output_8hpp}{output.\+hpp}\end{DoxyCompactItemize}
