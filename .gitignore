@@ -6,3 +6,5 @@ mtgos.firm
 *.core
 *.sym
 *.elf
+docs/html/
+docs/latex/

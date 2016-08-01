@@ -47,21 +47,21 @@ public:
     /**
      * \brief Outputs an object of any type
      */
-    template <typename T> auto operator<<(T &object) -> Output & {
+    template <typename T> auto operator<<(T object) -> Output & {
         puts(object);
     }
 };
 template <>
-auto Output::operator<<<Base>(Base&) -> Output &;
+auto Output::operator<<<Base>(Base) -> Output &;
 template <>
-auto Output::operator<<<int>(int&) -> Output&;
+auto Output::operator<<<int>(int) -> Output&;
 template <>
-auto Output::operator<<<long int>(long int&) -> Output&;
+auto Output::operator<<<long long int>(long long int) -> Output&;
 template <>
-auto Output::operator<<<unsigned int>(unsigned int&) -> Output&;
+auto Output::operator<<<unsigned int>(unsigned int) -> Output&;
 template <>
-auto Output::operator<<<unsigned long int>(unsigned long int&) -> Output&;
+auto Output::operator<<<unsigned long long int>(unsigned long long int) -> Output&;
 template <>
-auto Output::operator<<<char>(char &) -> Output&;
+auto Output::operator<<<char>(char) -> Output&;
 }
 }
