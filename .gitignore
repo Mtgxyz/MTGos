@@ -8,3 +8,4 @@ mtgos.firm
 *.elf
 docs/html/
 docs/latex/
+*.class

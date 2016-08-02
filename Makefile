@@ -1,5 +1,5 @@
 all: loader.bin firm.bin
-
+	$(MAKE) -C modules
 loader.bin:
 	$(MAKE) -C boot
 	mv boot/loader.bin .

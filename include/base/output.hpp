@@ -30,7 +30,7 @@ private:
     /**
      * \brief Output of a character (UTF-32)
      */
-    virtual auto putChar(int) -> void = 0;
+    virtual auto putChar(int) -> void {}
     /**
      * \brief Output of an ASCII-char
      */
@@ -40,6 +40,7 @@ private:
      */
     int base=10;
 public:
+    Output() {}
     /**
      * \brief Outputs an generic null-terminated ASCII string
      */
@@ -49,6 +50,7 @@ public:
      */
     template <typename T> auto operator<<(T object) -> Output & {
         puts(object);
+        return *this;
     }
 };
 template <>

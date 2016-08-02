@@ -18,11 +18,15 @@ struct FIRM_sect {
 struct FIRM_header {
     char magic[4]; //! Magic "FIRM" string (not-null terminated)
     int version; //! Version. Currently 1
-    void(*entrypoint)(); //! Address where the processor jumps to after loading
+    void(*entrypoint)(void**); //! Address where the processor jumps to after loading
     unsigned int reserved[0xD];
     struct FIRM_sect sections[4]; //! The four internal sections
     unsigned char RSA2048[0x100]; //! Currently unused
 }__attribute__((packed));
+/**
+ * \brief Module table for the kernel (Up to 1024 mods)
+ */
+void *modtable[1024];
 /**
  * \fn init(int, struct multiboot_info*)
  * \brief This routine is called by boot.S
@@ -31,6 +35,10 @@ struct FIRM_header {
  */
 void init(int eax, struct multiboot_info* mb_info) {
     multiboot_module_t *mods = (multiboot_module_t *) mb_info->mods_addr;
+    for(unsigned int i=0;i<mb_info->mods_count;i++) { //Get modules
+        modtable[i]=(void*)mods[i].mod_start;
+    }
+    modtable[mb_info->mods_count]=0;
     for(unsigned int i=0;i<mb_info->mods_count;i++) {
         struct FIRM_header *firm=(struct FIRM_header*)(mods[i].mod_start);
         if((firm->magic[0]!='F')||(firm->magic[1]!='I')||(firm->magic[2]!='R')||(firm->magic[3]!='M'))
@@ -46,18 +54,6 @@ void init(int eax, struct multiboot_info* mb_info) {
                 *to++=*from++;
             }
         }
-        const char hw[] = "Hello World!";
-    char* video = (char*) 0xb8000;
- 
-    // C-Strings haben ein Nullbyte als Abschluss
-    for (int k = 0; hw[k] != '\0'; k++) {
- 
-        // Zeichen i in den Videospeicher kopieren
-        video[k * 2] = hw[k];
- 
-        // 0x07 = Hellgrau auf Schwarz
-        video[k * 2 + 1] = 0x07;
-    }
-        firm->entrypoint();
+        firm->entrypoint(modtable); //Jump to kernel
     }
 }
