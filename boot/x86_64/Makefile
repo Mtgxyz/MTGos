@@ -3,8 +3,8 @@ CC=$(PREFIX)gcc
 LD=$(PREFIX)ld
 SRCS = $(shell find . -name '*.[cS]')
 OBJS = $(addsuffix .o,$(basename $(SRCS)))
-ASFLAGS = 
-CFLAGS += -fno-stack-protector -nostdinc -ffreestanding -std=c11 -fno-builtin -w -Werror -nostdlib -fpie
+ASFLAGS =
+CFLAGS += -fno-stack-protector -nostdinc -ffreestanding -std=c11 -fno-builtin -w -Werror -nostdlib -fpie 
 LDFLAGS += -T loader.ld
 all: $(OBJS)
 	$(LD) $(LDFLAGS) -o loader.bin $(OBJS)

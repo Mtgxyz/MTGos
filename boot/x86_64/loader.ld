@@ -1,14 +1,13 @@
 ENTRY(_start)
+OUTPUT_FORMAT(elf64-x86-64)
+OUTPUT_ARCH(i386:x86-64)
 SECTIONS
 {
         . = 0x100000;
         kernel_start = .;
-        .bootstrap : {
-            *(multiboot)
-            boot.S (.text)
-        }
         .text : {
-                *(EXCLUDE_FILE(*boot.S) .text)
+                *(multiboot)
+                *(.text)
         }
         .data : {
                 start_ctors = .;

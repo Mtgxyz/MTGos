@@ -1,15 +1,17 @@
-arch = x86
+arch = x86_64
 MODE = debug
 export PATH := $(HOME)/opt/bin:$(PATH)
+LDFLAGS =
 ifeq ($(arch),x86)
   PREFIX = i686-mtgos-
   libpath = i686-mtgos
   ARCHFLAGS = -m32
 else
   ifeq ($(arch),x86_64)
-    PREFIX = x86_64-elf-
-    libpath = x86_64-elf
-    ARCHFLAGS = -m64
+    PREFIX = x86_64-mtgos-
+    libpath = x86_64-mtgos
+    ARCHFLAGS = -m64 -mno-red-zone
+    LDFLAGS += -z max-page-size=0x1000
   else
     ifeq ($(arch),3ds)
       PREFIX = arm-none-eabi-

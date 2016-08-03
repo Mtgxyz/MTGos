@@ -1,16 +1,13 @@
-ENTRY(_start)
+ENTRY(getTable)
+OUTPUT_FORMAT(elf32-little)
+OUTPUT_ARCH(i386:x86-64)
 SECTIONS
 {
-        . = 0x100000;
-        kernel_start = .;
-        .bootstrap : {
-            *(multiboot)
-            boot.S (.text)
-        }
+        . = 0x108000;
+        module_start = .;
         .text : {
-                *(EXCLUDE_FILE(*boot.S) .text)
-        }
-        .data : {
+                *(.text)
+                *(.text.*)
                 start_ctors = .;
                         KEEP(*( .init_array ));
                         KEEP(*(SORT_BY_INIT_PRIORITY( .init_array.* )));
@@ -20,12 +17,9 @@ SECTIONS
                         *(.dtors)
                 end_dtors = .;
                 *(.data)
-        }
-        .rodata : {
+                *(.data.*)
                 *(.rodata)
-        }
-        .bss : {
                 *(.bss)
         }
-        kernel_end = .;
+        module_end = .;
 }
