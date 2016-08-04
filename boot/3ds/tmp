@@ -1,0 +1,13 @@
+Times:
+Once per build:
+GAWK: 15s (0.7832898172323%)
+autoconf: 2s (0.104438642297650%)
+automake: 2s (0.104438642297650%)
+
+Once per compiler:
+binutils: 25s (1.305483028720626%)
+gcc: 4m51s (291s) (15.19582245430809%)
+
+cross compilers: 6
+
+total time: 31m55s (1915s)
