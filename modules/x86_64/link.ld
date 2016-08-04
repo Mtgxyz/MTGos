@@ -1,9 +1,9 @@
 ENTRY(getTable)
-OUTPUT_FORMAT(elf32-little)
+OUTPUT_FORMAT(elf64-x86-64)
 OUTPUT_ARCH(i386:x86-64)
 SECTIONS
 {
-        . = 0x108000;
+        . = 0x109000;
         module_start = .;
         .text : {
                 *(.text)
@@ -20,6 +20,7 @@ SECTIONS
                 *(.data.*)
                 *(.rodata)
                 *(.bss)
+                *(COMMON)
         }
         module_end = .;
 }

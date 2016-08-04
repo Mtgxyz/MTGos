@@ -53,7 +53,7 @@ private:
 void(*tbl[3])()={(void(*)())&getType,(void(*)())&size_of,(void(*)())&spawnAt};
 table_type getTable() {
     doCtors();
-    return (void(**)())&tbl;
+    return (table_type)&tbl;
 }
 auto getType() -> ModType {
     return ModType::output_text;
