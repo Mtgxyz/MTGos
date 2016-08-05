@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 echo Entry point: $(nm mtgos.elf | egrep ' _start$' | awk '{print $1}')
 firmlink -O 200000 -E $(nm mtgos.elf | egrep ' _start$' | awk '{print $1}') -o $1.firm $1.bin
+firmlink -O 1FF80000 -E $(nm mtgos.elf | egrep ' _start$' | awk '{print $1}') -o 3ds-$1.firm $1.bin

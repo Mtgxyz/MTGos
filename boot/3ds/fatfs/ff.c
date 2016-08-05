@@ -143,22 +143,22 @@ DWORD get_fattime (void) {
     return 0;
 }
 
-WCHAR ff_convert (  /* Converted character, Returns zero on error */
-    WCHAR   src,    /* Character code to be converted */
-    UINT    dir     /* 0: Unicode to OEMCP, 1: OEMCP to Unicode */
+/*WCHAR ff_convert (  /* Converted character, Returns zero on error *
+    WCHAR   src,    /* Character code to be converted *
+    UINT    dir     /* 0: Unicode to OEMCP, 1: OEMCP to Unicode *
 )
 {
     WCHAR c;
 
 
-    if (src < 0x80) {   /* ASCII */
+    if (src < 0x80) {   /* ASCII *
         c = src;
 
     } else {
-        if (dir) {      /* OEMCP to Unicode */
+        if (dir) {      /* OEMCP to Unicode *
             c = (src >= 0x100) ? 0 : Tbl[src - 0x80];
 
-        } else {        /* Unicode to OEMCP */
+        } else {        /* Unicode to OEMCP *
             for (c = 0; c < 0x80; c++) {
                 if (src == Tbl[c]) break;
             }
@@ -177,7 +177,7 @@ WCHAR ff_wtoupper(WCHAR chr)
     else
         return chr;
 }
-
+*/
 
 /*--------------------------------------------------------------------------
    Module Private Definitions

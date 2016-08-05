@@ -1,4 +1,5 @@
-arch = x86_64
+arch = 3ds
+subvar = 9
 MODE = debug
 export PATH := $(HOME)/opt/bin:$(PATH)
 LDFLAGS =
@@ -16,17 +17,23 @@ else
     ifeq ($(arch),3ds)
       PREFIX = arm-none-eabi-
       libpath = arm-none-eabi
-      ARCHFLAGS = -m32
+      ifeq ($(subvar),9)
+        ARCHFLAGS = -mcpu=arm946e-s -march=armv5te -mlittle-endian
+      else
+        ARCHFLAGS = -mcpu=mpcore -mlittle-endian
+      endif
     endif
   endif
 endif
 
 ifeq ($(MODE),debug)
   CFLAGS := -g3 -DDEBUG
+  ASFLAGS := -g3 -DDEBUG
   CPPFLAGS := -g3 -DDEBUG
 else
   CFLAGS := -O2
   CPPFLAGS := -O2
 endif
+ASFLAGS += $(ARCHFLAGS)
 CFLAGS += $(ARCHFLAGS)
 CPPFLAGS += $(ARCHFLAGS)

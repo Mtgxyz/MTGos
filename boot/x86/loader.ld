@@ -3,12 +3,9 @@ SECTIONS
 {
         . = 0x100000;
         kernel_start = .;
-        .bootstrap : {
-            *(multiboot)
-            boot.S (.text)
-        }
         .text : {
-                *(EXCLUDE_FILE(*boot.S) .text)
+                *(multiboot)
+                *(.text)
         }
         .data : {
                 start_ctors = .;
