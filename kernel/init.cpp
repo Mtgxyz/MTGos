@@ -9,6 +9,8 @@
 #define Elf_Ehdr Elf32_Ehdr
 #define Elf_Phdr Elf32_Phdr
 #endif
+char *lfb=(char*)0x18300000;
+#define DIAGPXL(i) (lfb[6*(i)]=lfb[6*(i)+1]=lfb[6*(i)+2]=0xFF)
 /** \brief beginning of constructor table */
 extern "C" void(*start_ctors)(); 
 /** \brief end of constructor table */
@@ -44,6 +46,7 @@ MTGos::Base::Output out;
  * \brief Initializes the kernel
  */
 extern "C" void _start(void ** modtable) {
+    DIAGPXL(13);
     //for(void(**i)()=&start_ctors;i<&end_ctors;i++)
     //    (*i)(); //Calling constructors
     for(int i=0;i<1024;i++) {

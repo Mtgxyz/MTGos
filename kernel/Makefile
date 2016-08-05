@@ -8,7 +8,7 @@ LD = $(PREFIX)g++
 
 CFLAGS += -Wall -fno-stack-protector -nostdinc -Ic_include/ -I../c_include -ffreestanding -std=c11 -fno-builtin -Werror -nostdlib -g -fpie
 CPPFLAGS += -Wall -fno-stack-protector -nostdinc -std=c++14 -Iinclude/ -Ic_include/ -I../c_include -I../include -fno-rtti -fno-exceptions -ffreestanding -fno-builtin -Werror -nostdlib  -fno-use-cxa-atexit -Wextra -Wno-unused -g -fno-pie -Wno-reorder -fdump-class-hierarchy
-LDFLAGS += -nostdlib -nodefaultlibs -nostdlib -fno-builtin -T loader.ld
+LDFLAGS += -nostdlib -nodefaultlibs -nostdlib -fno-builtin -T loader-$(arch)-$(subvar).ld
 all: $(OBJS)
 	$(LD) $(LDFLAGS) -o mtgos.elf $(OBJS) -lgcc
 %.o: %.cpp

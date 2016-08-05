@@ -22,7 +22,7 @@ struct FIRM_header {
     char magic[4]; //! Magic "FIRM" string (not-null terminated)
     int version; //! Version. Currently 1
     void(*entrypoint)(void**); //! Address where the processor jumps to after loading
-    void * arm11entry;
+    void (*arm11entry)(void**);
     unsigned int reserved[0xC];
     struct FIRM_sect sections[4]; //! The four internal sections
     unsigned char RSA2048[0x100]; //! Currently unused
@@ -38,6 +38,8 @@ void init() {
     FATFS fs;
     FIL firm;
     f_mount(&fs, "0:", 0);
+    arm9modtable[0]=0;
+    arm11modtable[0]=0;
     if(f_open(&firm, "mtgos.firm", FA_READ | FA_OPEN_EXISTING) == FR_OK) {
         DIAGPXL(1);
         unsigned int br;
@@ -50,16 +52,17 @@ void init() {
             if(hdr.sections[i].size==0)
                 continue;
             f_lseek(&firm, hdr.sections[i].offset);
-            char oldval=*((char*)hdr.sections[i].physical);
+            *((char*)hdr.sections[i].physical)=0xFF;
+            char oldval=0xFF;
             f_read(&firm, (void*)hdr.sections[i].physical, hdr.sections[i].size, &br);
             if(oldval!=*((char*)hdr.sections[i].physical))
                 DIAGPXL(i+4);
             DIAGPXL(i+8);
         }
         DIAGPXL(12);
+        void(**a11fpointer)(void**)=(void(**)(void**))0x1FFFFFF8;
+        *a11fpointer=hdr.arm11entry;
+        hdr.entrypoint(0); //Jump to kernel
     }
-    DIAGPXL(13);
-    arm9modtable[0]=0;
-    arm11modtable[0]=0;
     for(;;);
 }
