@@ -38,7 +38,8 @@ void init() {
     FATFS fs;
     FIL firm;
     f_mount(&fs, "0:", 0);
-    arm9modtable[0]=0;
+    arm9modtable[0]=0x20000000;
+    arm9modtable[1]=0x20000000;
     arm11modtable[0]=0;
     if(f_open(&firm, "mtgos.firm", FA_READ | FA_OPEN_EXISTING) == FR_OK) {
         DIAGPXL(1);
@@ -60,9 +61,12 @@ void init() {
             DIAGPXL(i+8);
         }
         DIAGPXL(12);
+        FIL dsp_txt;
+        f_open(&dsp_txt, "dsp_txt.elf", FA_READ | FA_OPEN_EXISTING);
+        f_read(&dsp_txt, (void*)0x20000000, f_size(&dsp_txt), &br);
         void(**a11fpointer)(void**)=(void(**)(void**))0x1FFFFFF8;
         *a11fpointer=hdr.arm11entry;
-        hdr.entrypoint(0); //Jump to kernel
+        hdr.entrypoint(arm9modtable); //Jump to kernel
     }
     for(;;);
 }

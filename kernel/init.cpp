@@ -41,6 +41,15 @@ auto load(Elf_Ehdr* file) -> void(**(*)(void*))() {
   return nullptr;
 }
 MTGos::Base::Output out;
+void debugNumber(unsigned int i, int start) {
+    while(i) {
+        if(i&1)
+            lfb[(start*6)+5]=0xFF;
+        i>>=1;
+        lfb[(start*6)+1]=0x50;
+        start++;
+    }
+}
 /**
  * \function _start()
  * \brief Initializes the kernel
@@ -50,18 +59,28 @@ extern "C" void _start(void ** modtable) {
     //for(void(**i)()=&start_ctors;i<&end_ctors;i++)
     //    (*i)(); //Calling constructors
     for(int i=0;i<1024;i++) {
+        DIAGPXL(14);
         if(!modtable[i])
             break;
+        DIAGPXL(15);
         void(**(*fptr)(void*))() = load((Elf_Ehdr*) modtable[i]);
+        debugNumber((unsigned int)fptr, 50);
+        DIAGPXL(16);
         if(!fptr)
             continue;
+        DIAGPXL(17);
         void(**table)()=fptr(modtable[i]);
+        DIAGPXL(18);
         ModType type=((getType_type)table[0])(); //Get module type
+        DIAGPXL(19);
         if(type!=ModType::output_text)
             continue;
+        DIAGPXL(20);
         size_t size=((sizeof_type)table[1])(); //Get module size
+        DIAGPXL(21);
         ((spawnAt_type)table[2])((void*)&out);
-        out << "HI!\nbye!";
+        DIAGPXL(22);
+        //out << "HI!\nbye!";
     }
     for(void(**i)()=&start_dtors;i<&end_dtors;i++)
         (*i)(); //Calling destructors

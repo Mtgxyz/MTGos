@@ -3,7 +3,7 @@ OUTPUT_FORMAT(elf32-littlearm)
 OUTPUT_ARCH(arm)
 SECTIONS
 {
-        . = 0x20000000;
+        . = 0x20010000;
         module_start = .;
         .text : {
                 *(.text)
