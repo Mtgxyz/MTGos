@@ -2,8 +2,10 @@
 gmake clean
 gmake loader.bin
 gmake -C kernel
-gmake -C kernel clean
+gmake clean
 gmake -C modules
+gmake clean
+gmake -C modules subvar=11
 mv kernel/mtgos.elf .
 objcopy -O binary mtgos.elf mtgos.bin
 gmake -C kernel subvar=11
@@ -18,5 +20,6 @@ sudo rm mount/{arm9loaderhax.bin,mtgos.firm}
 sudo mv loader.bin mount/arm9loaderhax.bin
 sudo mv mtgos.firm mount/mtgos.firm
 sudo mv *.elf mount
+sudo mv *.neun mount
 sudo umount mount
 echo "Remove SD card!"

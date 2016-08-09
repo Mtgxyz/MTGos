@@ -2,16 +2,26 @@
 #include <base/output.hpp>
 #include <modstubs.h>
 #include "stdfnt.h"
+#ifdef ARM9
 uint8_t* vmem = (uint8_t*)0x18300000;
 uint8_t* dmem = (uint8_t*)0x18346500;
+#else
+uint8_t* dmem = (uint8_t*)0x18300000;
+uint8_t* vmem = (uint8_t*)0x18346500;
+#endif
 static int x=0,y=0;
-#define DIAGPXL(i) (dmem[6*(i)]=dmem[6*(i)+1]=dmem[6*(i)+2]=0xFF)
+#define DIAGPXL(i) (debugNumber(i,i))
 #define CHR_HEIGHT 8
 #define CHR_WIDTH 8
 #define HEIGHT 29
+#ifdef ARM9
 #define WIDTH 50
+#else
+#define WIDTH 40
+#endif
 #define BYTESPP 3
 void debugNumber(unsigned int i, int start) {
+    return;
     while(i) {
         if(i&1)
             dmem[(start*6)+5]=0xFF;
@@ -66,11 +76,13 @@ private:
             for(int cx=0;cx<CHR_WIDTH;cx++) {
                 for(int cy=0;cy<CHR_HEIGHT;cy++) {
                     if(font[c][cy]&(1<<cx)) {
-                        vmem[((x*CHR_WIDTH+cx)*(HEIGHT+1)*8+((HEIGHT-y)*CHR_HEIGHT+cy))*BYTESPP]=0xFF;
-                        vmem[((x*CHR_WIDTH+cx)*(HEIGHT+1)*8+((HEIGHT-y)*CHR_HEIGHT+cy))*BYTESPP+1]=0;
+                        vmem[((x*CHR_WIDTH+cx)*(HEIGHT+1)*8+HEIGHT*CHR_HEIGHT-(y*CHR_HEIGHT+cy))*BYTESPP]=0xFF;
+                        vmem[((x*CHR_WIDTH+cx)*(HEIGHT+1)*8+HEIGHT*CHR_HEIGHT-(y*CHR_HEIGHT+cy))*BYTESPP+1]=0xFF;
+                        vmem[((x*CHR_WIDTH+cx)*(HEIGHT+1)*8+HEIGHT*CHR_HEIGHT-(y*CHR_HEIGHT+cy))*BYTESPP+2]=0xFF;
                     }else {
-                        vmem[((x*CHR_WIDTH+cx)*(HEIGHT+1)*8+((HEIGHT-y)*CHR_HEIGHT+cy))*BYTESPP+1]=0xFF;
-                        vmem[((x*CHR_WIDTH+cx)*(HEIGHT+1)*8+((HEIGHT-y)*CHR_HEIGHT+cy))*BYTESPP]=0;
+                        vmem[((x*CHR_WIDTH+cx)*(HEIGHT+1)*8+HEIGHT*CHR_HEIGHT-(y*CHR_HEIGHT+cy))*BYTESPP]=0;
+                        vmem[((x*CHR_WIDTH+cx)*(HEIGHT+1)*8+HEIGHT*CHR_HEIGHT-(y*CHR_HEIGHT+cy))*BYTESPP+1]=0;
+                        vmem[((x*CHR_WIDTH+cx)*(HEIGHT+1)*8+HEIGHT*CHR_HEIGHT-(y*CHR_HEIGHT+cy))*BYTESPP+2]=0;
                     }
                 }
             }
@@ -82,8 +94,8 @@ private:
             break;
         }
         debugNumber((unsigned int)y,532+8*8+64);
-        //if(y>HEIGHT)
-        //    scroll();
+        if(y>HEIGHT)
+            scroll();
     }
 };
 }

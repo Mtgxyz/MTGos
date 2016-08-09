@@ -10,7 +10,11 @@
 #define Elf_Phdr Elf32_Phdr
 #endif
 char *lfb=(char*)0x18346500;
+#ifndef ARM9
 #define DIAGPXL(i) (lfb[6*(i)]=lfb[6*(i)+1]=lfb[6*(i)+2]=0xFF)
+#else
+#define DIAGPXL(i) (0)
+#endif
 /** \brief beginning of constructor table */
 extern "C" void(*start_ctors)(); 
 /** \brief end of constructor table */
@@ -79,7 +83,12 @@ extern "C" void _start(void ** modtable) {
         DIAGPXL(21);
         ((spawnAt_type)table[2])((void*)&out);
         DIAGPXL(22);
-        out << "HI!\nbye!";
+        out << "HI!\nbye!\n";
+#ifdef ARM9
+        out << "Here arm9!\n";  
+#else
+        out << "Here arm11!\n";
+#endif
     }
     for(void(**i)()=&start_dtors;i<&end_dtors;i++)
         (*i)(); //Calling destructors

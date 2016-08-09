@@ -11,6 +11,3 @@ firm.bin:
 	rm -rf mtgos.bin
 clean:
 	find . -name '*.o' -delete
-	find . -name '*.bin' -delete
-	find . -name '*.firm' -delete
-	find . -name '*.mod' -delete

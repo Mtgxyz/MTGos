@@ -2,7 +2,11 @@
 #include "sdmmc.h"
 #include "fatfs/ff.h"
 char *lfb=(char*)0x18346500;
+#ifndef ARM9
 #define DIAGPXL(i) (lfb[6*(i)]=lfb[6*(i)+1]=lfb[6*(i)+2]=0xFF)
+#else
+#define DIAGPXL(i) (0)
+#endif
 /**
  * \struct FIRM_sect
  * \brief Contains one section of the FIRM format
@@ -33,14 +37,20 @@ struct FIRM_header {
 void *arm9modtable[64];
 void *arm11modtable[64];
 struct FIRM_header hdr;
-void init() {
+void doARM11() {
     DIAGPXL(0);
+    hdr.arm11entry(arm11modtable);
+    for(;;);
+}
+void init() {
     FATFS fs;
     FIL firm;
     f_mount(&fs, "0:", 0);
+    unsigned int off=0x20000000;
     arm9modtable[0]=0x20000000;
     arm9modtable[1]=0;
-    arm11modtable[0]=0;
+    arm11modtable[0]=0x20000000;
+    arm11modtable[1]=0;
     if(f_open(&firm, "mtgos.firm", FA_READ | FA_OPEN_EXISTING) == FR_OK) {
         DIAGPXL(1);
         unsigned int br;
@@ -61,11 +71,18 @@ void init() {
             DIAGPXL(i+8);
         }
         DIAGPXL(12);
-        FIL dsp_txt;
-        f_open(&dsp_txt, "dsp_txt.elf", FA_READ | FA_OPEN_EXISTING);
-        f_read(&dsp_txt, (void*)0x20000000, f_size(&dsp_txt), &br);
-        void(**a11fpointer)(void**)=(void(**)(void**))0x1FFFFFF8;
-        *a11fpointer=hdr.arm11entry;
+        FIL dsp_txt9;
+        f_open(&dsp_txt9, "dsp_txt.neun", FA_READ | FA_OPEN_EXISTING);
+        f_read(&dsp_txt9, (void*)off, f_size(&dsp_txt9), &br);
+        off+=f_size(&dsp_txt9);
+        FIL dsp_txt11;
+        arm11modtable[0]=off;
+        arm11modtable[1]=0;
+        f_open(&dsp_txt11, "dsp_txt.elf", FA_READ | FA_OPEN_EXISTING);
+        f_read(&dsp_txt11, (void*)off, f_size(&dsp_txt11), &br);
+        off+=f_size(&dsp_txt11);
+        void(**a11fpointer)(void)=(void(**)(void**))0x1FFFFFF8;
+        *a11fpointer=&doARM11;
         hdr.entrypoint(arm9modtable); //Jump to kernel
     }
     for(;;);

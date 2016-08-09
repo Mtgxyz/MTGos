@@ -28,5 +28,11 @@ SECTIONS
                 *(.bss)
                 *(COMMON)
         }
+        .rel.plt : {
+                *(.rel.plt)
+        }
+        .rel.dyn : {
+                *(.rel.dyn)
+        }
         module_end = .;
-}
+}     

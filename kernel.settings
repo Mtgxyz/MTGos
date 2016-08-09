@@ -18,9 +18,11 @@ else
       PREFIX = arm-none-eabi-
       libpath = arm-none-eabi
       ifeq ($(subvar),9)
-        ARCHFLAGS = -mcpu=arm946e-s -march=armv5te -mlittle-endian
+        ARCHFLAGS = -mcpu=arm946e-s -march=armv5te -mlittle-endian -DARM9
+        MOD_SUFF=neun
       else
-        ARCHFLAGS = -mcpu=mpcore -mlittle-endian
+        ARCHFLAGS = -mcpu=mpcore -mlittle-endian -DARM11
+        MOD_SUFF=elf
       endif
     endif
   endif
