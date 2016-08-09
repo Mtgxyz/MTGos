@@ -1,7 +1,7 @@
 #include "common.h"
 #include "sdmmc.h"
 #include "fatfs/ff.h"
-char *lfb=(char*)0x18300000;
+char *lfb=(char*)0x18346500;
 #define DIAGPXL(i) (lfb[6*(i)]=lfb[6*(i)+1]=lfb[6*(i)+2]=0xFF)
 /**
  * \struct FIRM_sect
@@ -39,7 +39,7 @@ void init() {
     FIL firm;
     f_mount(&fs, "0:", 0);
     arm9modtable[0]=0x20000000;
-    arm9modtable[1]=0x20000000;
+    arm9modtable[1]=0;
     arm11modtable[0]=0;
     if(f_open(&firm, "mtgos.firm", FA_READ | FA_OPEN_EXISTING) == FR_OK) {
         DIAGPXL(1);

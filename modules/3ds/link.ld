@@ -8,6 +8,8 @@ SECTIONS
         .text : {
                 *(.text)
                 *(.text.*)
+        }
+        .data : {
                 start_ctors = .;
                         KEEP(*( .init_array ));
                         KEEP(*(SORT_BY_INIT_PRIORITY( .init_array.* )));
@@ -18,7 +20,11 @@ SECTIONS
                 end_dtors = .;
                 *(.data)
                 *(.data.*)
+        }
+        .rodata : {
                 *(.rodata)
+        }
+        .bss : {
                 *(.bss)
                 *(COMMON)
         }
