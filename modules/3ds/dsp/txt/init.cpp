@@ -103,7 +103,7 @@ private:
 void(*tbl[3])()={(void(*)())&getType,(void(*)())&size_of,(void(*)())&spawnAt};
 table_type getTable() {
     x=y=0;
-    doCtors();
+//    doCtors();
     DIAGPXL(23);
     return (table_type)&tbl;
 }

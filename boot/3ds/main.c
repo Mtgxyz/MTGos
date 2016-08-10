@@ -2,7 +2,7 @@
 #include "sdmmc.h"
 #include "fatfs/ff.h"
 char *lfb=(char*)0x18346500;
-#ifndef ARM9
+#ifdef ARM9
 #define DIAGPXL(i) (lfb[6*(i)]=lfb[6*(i)+1]=lfb[6*(i)+2]=0xFF)
 #else
 #define DIAGPXL(i) (0)
@@ -75,6 +75,8 @@ void init() {
         f_open(&dsp_txt9, "dsp_txt.neun", FA_READ | FA_OPEN_EXISTING);
         f_read(&dsp_txt9, (void*)off, f_size(&dsp_txt9), &br);
         off+=f_size(&dsp_txt9);
+	off&=~0xfff;
+	off+=0x1000;
         FIL dsp_txt11;
         arm11modtable[0]=off;
         arm11modtable[1]=0;

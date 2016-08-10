@@ -3,7 +3,7 @@ OUTPUT_FORMAT(elf32-littlearm)
 OUTPUT_ARCH(arm)
 SECTIONS
 {
-        . = 0x20010000;
+        . = 0;
         module_start = .;
         .text : {
                 *(.text)
@@ -28,6 +28,9 @@ SECTIONS
                 *(.bss)
                 *(COMMON)
         }
+	.plt : {
+		*(.plt)
+	}
         .rel.plt : {
                 *(.rel.plt)
         }

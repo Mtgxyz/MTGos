@@ -68,12 +68,19 @@ extern "C" void _start(void ** modtable) {
             break;
         DIAGPXL(15);
         void(**(*fptr)(void*))() = load((Elf_Ehdr*) modtable[i]);
+	fptr=(void(**(*)(void*))())((unsigned int)fptr-8);
         DIAGPXL(16);
+	debugNumber((unsigned int)fptr,50);
+//	debugNumber((unsigned int)modtable[i],50+32);
         if(!fptr)
             continue;
         DIAGPXL(17);
         void(**table)()=fptr(modtable[i]);
         DIAGPXL(18);
+	table=(void(**)())((unsigned int)table+(unsigned int)modtable[i]+0x1000);
+	unsigned int* tbl=(unsigned int*)table;
+	tbl[0]+=(unsigned int)modtable[i]+0x1000;
+	debugNumber((unsigned int)table[0],50+32);
         ModType type=((getType_type)table[0])(); //Get module type
         DIAGPXL(19);
         if(type!=ModType::output_text)

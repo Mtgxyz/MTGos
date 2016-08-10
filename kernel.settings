@@ -2,7 +2,7 @@ arch = 3ds
 subvar = 9
 MODE = debug
 export PATH := $(HOME)/opt/bin:$(PATH)
-LDFLAGS =
+LDFLAGS = -fPIC
 ifeq ($(arch),x86)
   PREFIX = i686-mtgos-
   libpath = i686-mtgos
@@ -37,5 +37,5 @@ else
   CPPFLAGS := -O2
 endif
 ASFLAGS += $(ARCHFLAGS)
-CFLAGS += $(ARCHFLAGS)
-CPPFLAGS += $(ARCHFLAGS)
+CFLAGS += -fPIC $(ARCHFLAGS)
+CPPFLAGS += -fPIC $(ARCHFLAGS)
