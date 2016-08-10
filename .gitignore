@@ -9,3 +9,4 @@ mtgos.firm
 docs/html/
 docs/latex/
 *.class
+*.neun
