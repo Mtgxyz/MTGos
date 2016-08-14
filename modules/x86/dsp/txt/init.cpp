@@ -11,7 +11,7 @@ namespace {
  */
 class Screen: public Base::Output {
 public:
-    Screen() {}
+    Screen() {x=0;y=0;vmem = (uint16_t*)0xB8000;}
     auto scroll() -> void {
         for(int p=0;p<80*25;p++)
             vmem[p]=vmem[p+80];

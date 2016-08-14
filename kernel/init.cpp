@@ -54,6 +54,12 @@ void debugNumber(unsigned int i, int start) {
         start++;
     }
 }
+void adjustVTable(unsigned int** obj, unsigned int mod, int vtableSize) {
+    mod+=0x1000;
+    for(int i=0;i<vtableSize;i++) {
+        (*obj)[i]+=mod;
+    }
+}
 /**
  * \function _start()
  * \brief Initializes the kernel
@@ -68,19 +74,21 @@ extern "C" void _start(void ** modtable) {
             break;
         DIAGPXL(15);
         void(**(*fptr)(void*))() = load((Elf_Ehdr*) modtable[i]);
-	fptr=(void(**(*)(void*))())((unsigned int)fptr-8);
-        DIAGPXL(16);
-	debugNumber((unsigned int)fptr,50);
-//	debugNumber((unsigned int)modtable[i],50+32);
         if(!fptr)
             continue;
+//        fptr=(void(**(*)(void*))())((unsigned int)fptr-8);
+        DIAGPXL(16);
+        debugNumber((unsigned int)fptr,50);
+//        debugNumber((unsigned int)modtable[i],50+32);
         DIAGPXL(17);
         void(**table)()=fptr(modtable[i]);
         DIAGPXL(18);
-	table=(void(**)())((unsigned int)table+(unsigned int)modtable[i]+0x1000);
-	unsigned int* tbl=(unsigned int*)table;
-	tbl[0]+=(unsigned int)modtable[i]+0x1000;
-	debugNumber((unsigned int)table[0],50+32);
+        table=(void(**)())((unsigned int)table+(unsigned int)modtable[i]+0x1000);
+        unsigned int* tbl=(unsigned int*)table;
+        tbl[0]+=(unsigned int)modtable[i]+0x1000;
+        tbl[1]+=(unsigned int)modtable[i]+0x1000;
+        tbl[2]+=(unsigned int)modtable[i]+0x1000;
+        debugNumber((unsigned int)table[0],50+32);
         ModType type=((getType_type)table[0])(); //Get module type
         DIAGPXL(19);
         if(type!=ModType::output_text)
@@ -90,12 +98,15 @@ extern "C" void _start(void ** modtable) {
         DIAGPXL(21);
         ((spawnAt_type)table[2])((void*)&out);
         DIAGPXL(22);
+        adjustVTable((unsigned int**) &out, (unsigned int)modtable[i], 1);
         out << "HI!\nbye!\n";
 #ifdef ARM9
         out << "Here arm9!\n";  
 #else
         out << "Here arm11!\n";
 #endif
+        char* x=(char*)0xB80000;
+        x[0]='H';
     }
     for(void(**i)()=&start_dtors;i<&end_dtors;i++)
         (*i)(); //Calling destructors

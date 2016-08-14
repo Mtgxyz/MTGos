@@ -1,7 +1,7 @@
 ENTRY(getTable)
 SECTIONS
 {
-        . = 0x106000;
+        . = /*0x106000;*/0;
         module_start = .;
         .text : {
                 *(.text)
@@ -18,6 +18,10 @@ SECTIONS
                 *(.data.*)
                 *(.rodata)
                 *(.bss)
+                *(COMMON)
+                *(.plt)
+                *(.rel.plt)
+                *(.rel.dyn)
         }
         module_end = .;
-}
+}     
