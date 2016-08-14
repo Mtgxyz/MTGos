@@ -1,4 +1,4 @@
-arch = x86
+arch = x86_64
 subvar = 9
 MODE = debug
 export PATH := $(HOME)/opt/bin:$(PATH)
@@ -9,8 +9,8 @@ ifeq ($(arch),x86)
   ARCHFLAGS = -m32
 else
   ifeq ($(arch),x86_64)
-    PREFIX = x86_64-mtgos-
-    libpath = x86_64-mtgos
+    PREFIX = x86_64-elf-
+    libpath = x86_64-elf
     ARCHFLAGS = -m64 -mno-red-zone
     LDFLAGS += -z max-page-size=0x1000
   else

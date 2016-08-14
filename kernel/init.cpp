@@ -45,7 +45,7 @@ auto load(Elf_Ehdr* file) -> void(**(*)(void*))() {
   return nullptr;
 }
 MTGos::Base::Output out;
-void debugNumber(unsigned int i, int start) {
+void debugNumber(uintptr_t i, int start) {
     while(i) {
         if(i&1)
             lfb[(start*6)+5]=0xFF;
@@ -54,7 +54,7 @@ void debugNumber(unsigned int i, int start) {
         start++;
     }
 }
-void adjustVTable(unsigned int** obj, unsigned int mod, int vtableSize) {
+void adjustVTable(uintptr_t** obj, uintptr_t mod, int vtableSize) {
     mod+=0x1000;
     for(int i=0;i<vtableSize;i++) {
         (*obj)[i]+=mod;
@@ -76,19 +76,23 @@ extern "C" void _start(void ** modtable) {
         void(**(*fptr)(void*))() = load((Elf_Ehdr*) modtable[i]);
         if(!fptr)
             continue;
-//        fptr=(void(**(*)(void*))())((unsigned int)fptr-8);
+//        fptr=(void(**(*)(void*))())((uintptr_t)fptr-8);
         DIAGPXL(16);
-        debugNumber((unsigned int)fptr,50);
-//        debugNumber((unsigned int)modtable[i],50+32);
+        debugNumber((uintptr_t)fptr,50);
+//        debugNumber((uintptr_t)modtable[i],50+32);
         DIAGPXL(17);
         void(**table)()=fptr(modtable[i]);
         DIAGPXL(18);
-        table=(void(**)())((unsigned int)table+(unsigned int)modtable[i]+0x1000);
-        unsigned int* tbl=(unsigned int*)table;
-        tbl[0]+=(unsigned int)modtable[i]+0x1000;
-        tbl[1]+=(unsigned int)modtable[i]+0x1000;
-        tbl[2]+=(unsigned int)modtable[i]+0x1000;
-        debugNumber((unsigned int)table[0],50+32);
+#ifndef __LP64__
+        //Relocate table
+        table=(void(**)())((uintptr_t)table+(uintptr_t)modtable[i]+0x1000);
+#endif
+        //Relocate table contents
+        uintptr_t* tbl=(uintptr_t*)table;
+        tbl[0]+=(uintptr_t)modtable[i]+0x1000;
+        tbl[1]+=(uintptr_t)modtable[i]+0x1000;
+        tbl[2]+=(uintptr_t)modtable[i]+0x1000;
+        debugNumber((uintptr_t)table[0],50+32);
         ModType type=((getType_type)table[0])(); //Get module type
         DIAGPXL(19);
         if(type!=ModType::output_text)
@@ -98,7 +102,7 @@ extern "C" void _start(void ** modtable) {
         DIAGPXL(21);
         ((spawnAt_type)table[2])((void*)&out);
         DIAGPXL(22);
-        adjustVTable((unsigned int**) &out, (unsigned int)modtable[i], 1);
+        adjustVTable((uintptr_t**) &out, (uintptr_t)modtable[i], 1);
         out << "HI!\nbye!\n";
 #ifdef ARM9
         out << "Here arm9!\n";  
