@@ -2,7 +2,7 @@
 #include <base/output.hpp>
 #include <modstubs.h>
 #include "stdfnt.h"
-#ifdef ARM9
+#ifndef ARM9
 uint8_t* vmem = (uint8_t*)0x18300000;
 uint8_t* dmem = (uint8_t*)0x18346500;
 #else
@@ -14,7 +14,7 @@ static int x=0,y=0;
 #define CHR_HEIGHT 8
 #define CHR_WIDTH 8
 #define HEIGHT 29
-#ifdef ARM9
+#ifndef ARM9
 #define WIDTH 50
 #else
 #define WIDTH 40
@@ -100,12 +100,22 @@ private:
 };
 }
 }
-void(*tbl[3])()={(void(*)())&getType,(void(*)())&size_of,(void(*)())&spawnAt};
+//void(*tbl[3])()={(void(*)())&getType,(void(*)())&size_of,(void(*)())&spawnAt};
 table_type getTable() {
-    x=y=0;
-//    doCtors();
-    DIAGPXL(23);
-    return (table_type)&tbl;
+#ifdef ARM9
+    void(**tbl)() = (void(**)())0x27FFFFE8;
+#else
+    void(**tbl)() = (void(**)())0x27FFFFF4;
+#endif
+    tbl[0]=(void(*)())&getType;
+    tbl[1]=(void(*)())&size_of;
+    tbl[2]=(void(*)())&spawnAt;
+    doCtors();
+#ifdef ARM9
+    return (void(**)())0x27FFFFE8;
+#else
+    return (void(**)())0x27FFFFF4;
+#endif
 }
 auto getType() -> ModType {
     DIAGPXL(24);
@@ -113,7 +123,7 @@ auto getType() -> ModType {
 }
 auto spawnAt(void* pos) -> bool {
     debugNumber((unsigned int)pos,82);
-    DIAGPXL(30);
+    DIAGPXL(530);
     new(pos) MTGos::Screen;
     return true;
 }

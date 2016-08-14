@@ -1,4 +1,4 @@
-arch = x86_64
+arch = 3ds
 subvar = 9
 MODE = debug
 export PATH := $(HOME)/opt/bin:$(PATH)

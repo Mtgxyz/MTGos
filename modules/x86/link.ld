@@ -22,6 +22,8 @@ SECTIONS
                 *(.plt)
                 *(.rel.plt)
                 *(.rel.dyn)
+                *(.got)
+                *(.got.plt)
         }
         module_end = .;
 }     

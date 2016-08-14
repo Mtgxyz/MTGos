@@ -10,7 +10,7 @@
 #define Elf_Phdr Elf32_Phdr
 #endif
 char *lfb=(char*)0x18346500;
-#ifndef ARM9
+#ifdef ARM9
 #define DIAGPXL(i) (lfb[6*(i)]=lfb[6*(i)+1]=lfb[6*(i)+2]=0xFF)
 #else
 #define DIAGPXL(i) (0)
@@ -65,6 +65,9 @@ void adjustVTable(uintptr_t** obj, uintptr_t mod, int vtableSize) {
  * \brief Initializes the kernel
  */
 extern "C" void _start(void ** modtable) {
+#ifdef ARM11
+    for(;;);
+#endif
     DIAGPXL(13);
     //for(void(**i)()=&start_ctors;i<&end_ctors;i++)
     //    (*i)(); //Calling constructors
@@ -78,30 +81,38 @@ extern "C" void _start(void ** modtable) {
             continue;
 //        fptr=(void(**(*)(void*))())((uintptr_t)fptr-8);
         DIAGPXL(16);
-        debugNumber((uintptr_t)fptr,50);
 //        debugNumber((uintptr_t)modtable[i],50+32);
         DIAGPXL(17);
         void(**table)()=fptr(modtable[i]);
+        //debugNumber((uintptr_t)table,50+96);
         DIAGPXL(18);
 #ifndef __LP64__
         //Relocate table
         table=(void(**)())((uintptr_t)table+(uintptr_t)modtable[i]+0x1000);
 #endif
+#ifdef ARM9
+        table = (void(**)())0x27FFFFE8;
+#else
+#ifdef ARM11
+        table = (void(**)())0x27FFFFF4;
+#endif
+#endif
         //Relocate table contents
-        uintptr_t* tbl=(uintptr_t*)table;
+        uintptr_t* tbl=(uintptr_t*)table;;
         tbl[0]+=(uintptr_t)modtable[i]+0x1000;
         tbl[1]+=(uintptr_t)modtable[i]+0x1000;
         tbl[2]+=(uintptr_t)modtable[i]+0x1000;
-        debugNumber((uintptr_t)table[0],50+32);
+        DIAGPXL(500);
         ModType type=((getType_type)table[0])(); //Get module type
-        DIAGPXL(19);
-        if(type!=ModType::output_text)
-            continue;
-        DIAGPXL(20);
+        DIAGPXL(501);
+        //if(type!=ModType::output_text)
+            //continue;
+        DIAGPXL(502);
         size_t size=((sizeof_type)table[1])(); //Get module size
-        DIAGPXL(21);
+        debugNumber((uintptr_t)size,50);
+        DIAGPXL(503);
         ((spawnAt_type)table[2])((void*)&out);
-        DIAGPXL(22);
+        DIAGPXL(504);
         adjustVTable((uintptr_t**) &out, (uintptr_t)modtable[i], 1);
         out << "HI!\nbye!\n";
 #ifdef ARM9
@@ -109,8 +120,6 @@ extern "C" void _start(void ** modtable) {
 #else
         out << "Here arm11!\n";
 #endif
-        char* x=(char*)0xB80000;
-        x[0]='H';
     }
     for(void(**i)()=&start_dtors;i<&end_dtors;i++)
         (*i)(); //Calling destructors
