@@ -9,12 +9,12 @@
 #define Elf_Ehdr Elf32_Ehdr
 #define Elf_Phdr Elf32_Phdr
 #endif
-char *lfb=(char*)0x18346500;
-#ifdef ARM9
-#define DIAGPXL(i) (lfb[6*(i)]=lfb[6*(i)+1]=lfb[6*(i)+2]=0xFF)
+#if defined(ARM9) || defined(ARM11)
+#define PAGE_SIZE 0x10000
 #else
-#define DIAGPXL(i) (0)
+#define PAGE_SIZE 0x1000
 #endif
+char *lfb=(char*)0x18346500;
 /** \brief beginning of constructor table */
 extern "C" void(*start_ctors)(); 
 /** \brief end of constructor table */
@@ -45,17 +45,8 @@ auto load(Elf_Ehdr* file) -> void(**(*)(void*))() {
   return nullptr;
 }
 MTGos::Base::Output out;
-void debugNumber(uintptr_t i, int start) {
-    while(i) {
-        if(i&1)
-            lfb[(start*6)+5]=0xFF;
-        i>>=1;
-        lfb[(start*6)+1]=0x50;
-        start++;
-    }
-}
 void adjustVTable(uintptr_t** obj, uintptr_t mod, int vtableSize) {
-    mod+=0x1000;
+    mod+=PAGE_SIZE;
     for(int i=0;i<vtableSize;i++) {
         (*obj)[i]+=mod;
     }
@@ -65,27 +56,15 @@ void adjustVTable(uintptr_t** obj, uintptr_t mod, int vtableSize) {
  * \brief Initializes the kernel
  */
 extern "C" void _start(void ** modtable) {
-#ifdef ARM11
-    for(;;);
-#endif
-    DIAGPXL(13);
     //for(void(**i)()=&start_ctors;i<&end_ctors;i++)
     //    (*i)(); //Calling constructors
     for(int i=0;i<1024;i++) {
-        DIAGPXL(14);
         if(!modtable[i])
             break;
-        DIAGPXL(15);
         void(**(*fptr)(void*))() = load((Elf_Ehdr*) modtable[i]);
         if(!fptr)
             continue;
-//        fptr=(void(**(*)(void*))())((uintptr_t)fptr-8);
-        DIAGPXL(16);
-//        debugNumber((uintptr_t)modtable[i],50+32);
-        DIAGPXL(17);
         void(**table)()=fptr(modtable[i]);
-        //debugNumber((uintptr_t)table,50+96);
-        DIAGPXL(18);
 #ifndef __LP64__
         //Relocate table
         table=(void(**)())((uintptr_t)table+(uintptr_t)modtable[i]+0x1000);
@@ -98,21 +77,15 @@ extern "C" void _start(void ** modtable) {
 #endif
 #endif
         //Relocate table contents
-        uintptr_t* tbl=(uintptr_t*)table;;
-        tbl[0]+=(uintptr_t)modtable[i]+0x1000;
-        tbl[1]+=(uintptr_t)modtable[i]+0x1000;
-        tbl[2]+=(uintptr_t)modtable[i]+0x1000;
-        DIAGPXL(500);
+        uintptr_t* tbl=(uintptr_t*)table;
+        tbl[0]+=(uintptr_t)modtable[i]+PAGE_SIZE;
+        tbl[1]+=(uintptr_t)modtable[i]+PAGE_SIZE;
+        tbl[2]+=(uintptr_t)modtable[i]+PAGE_SIZE;
         ModType type=((getType_type)table[0])(); //Get module type
-        DIAGPXL(501);
-        //if(type!=ModType::output_text)
-            //continue;
-        DIAGPXL(502);
+        if(type!=ModType::output_text)
+            continue;
         size_t size=((sizeof_type)table[1])(); //Get module size
-        debugNumber((uintptr_t)size,50);
-        DIAGPXL(503);
-        ((spawnAt_type)table[2])((void*)&out);
-        DIAGPXL(504);
+        ((spawnAt_type)table[2])((void*)&out); //Spawn module
         adjustVTable((uintptr_t**) &out, (uintptr_t)modtable[i], 1);
         out << "HI!\nbye!\n";
 #ifdef ARM9
