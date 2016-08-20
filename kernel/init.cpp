@@ -51,6 +51,11 @@ void adjustVTable(uintptr_t** obj, uintptr_t mod, int vtableSize) {
         (*obj)[i]+=mod;
     }
 }
+void* getModule(ModType mt) {
+    if(mt==ModType::output_text)
+        return (void*) &out;
+    return nullptr;
+}
 /**
  * \function _start()
  * \brief Initializes the kernel
@@ -61,20 +66,13 @@ extern "C" void _start(void ** modtable) {
     for(int i=0;i<1024;i++) {
         if(!modtable[i])
             break;
-        void(**(*fptr)(void*))() = load((Elf_Ehdr*) modtable[i]);
+        void(**(*fptr)(void* (*)(ModType)))() = (void(**(*)(void* (*)(ModType)))()) load((Elf_Ehdr*) modtable[i]);
         if(!fptr)
             continue;
-        void(**table)()=fptr(modtable[i]);
+        void(**table)()=fptr(&getModule);
 #ifndef __LP64__
         //Relocate table
-        table=(void(**)())((uintptr_t)table+(uintptr_t)modtable[i]+0x1000);
-#endif
-#ifdef ARM9
-        table = (void(**)())0x27FFFFE8;
-#else
-#ifdef ARM11
-        table = (void(**)())0x27FFFFF4;
-#endif
+        table=(void(**)())((uintptr_t)table+(uintptr_t)modtable[i]+PAGE_SIZE);
 #endif
         //Relocate table contents
         uintptr_t* tbl=(uintptr_t*)table;
@@ -82,17 +80,25 @@ extern "C" void _start(void ** modtable) {
         tbl[1]+=(uintptr_t)modtable[i]+PAGE_SIZE;
         tbl[2]+=(uintptr_t)modtable[i]+PAGE_SIZE;
         ModType type=((getType_type)table[0])(); //Get module type
-        if(type!=ModType::output_text)
-            continue;
-        size_t size=((sizeof_type)table[1])(); //Get module size
-        ((spawnAt_type)table[2])((void*)&out); //Spawn module
-        adjustVTable((uintptr_t**) &out, (uintptr_t)modtable[i], 1);
-        out << "HI!\nbye!\n";
+        switch(type) {
+            case ModType::output_text: {
+                size_t size=((sizeof_type)table[1])(); //Get module size
+                ((spawnAt_type)table[2])((void*)&out); //Spawn module
+                adjustVTable((uintptr_t**) &out, (uintptr_t)modtable[i], 1);
+                out << "HI!\nbye!\n";
 #ifdef ARM9
-        out << "Here arm9!\n";  
+                    out << "Here arm9!\n";  
 #else
-        out << "Here arm11!\n";
+                    out << "Here arm11!\n";
 #endif
+                    for(int i=0;i>=0;i++) {
+                        out << i << " ";
+                    }
+                break; }
+            case ModType::none:
+            default:
+                out << "This is not a module I can load!\n";
+        }
     }
     for(void(**i)()=&start_dtors;i<&end_dtors;i++)
         (*i)(); //Calling destructors

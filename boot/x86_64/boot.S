@@ -110,22 +110,35 @@ gdt:
 .byte 0x98
 .byte 0xCF
 .byte 0x00
-//data
+//data kernel
 .word 0xFFFF
 .word 0x0000
 .byte 0x00
 .byte 0x92
 .byte 0xCF
 .byte 00
-//64-bit code
+//64-bit code kernel
 .int 0
 .byte 0
 .byte 0x98
 .byte 0x20
 .byte 0
+//data user
+.word 0xFFFF
+.word 0x0000
+.byte 0x00
+.byte 0xF2
+.byte 0xCF
+.byte 00
+//64-bit code user
+.int 0
+.byte 0
+.byte 0xF8
+.byte 0x20
+.byte 0
 
 gdtr:
-  .word 4 * 8
+  .word 6 * 8
   .int gdt
 pmfill:
 .int pagedirPT + 0x7

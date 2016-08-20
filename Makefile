@@ -1,9 +1,9 @@
-all: loader.bin firm.bin
+all: loader.bin mtgos.firm
 	$(MAKE) -C modules
 loader.bin:
 	$(MAKE) -C boot
 	mv boot/loader.bin .
-firm.bin:
+mtgos.firm:
 	$(MAKE) -C kernel
 	mv kernel/mtgos.elf .
 	objcopy -O binary mtgos.elf mtgos.bin

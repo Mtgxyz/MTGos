@@ -23,7 +23,7 @@ typedef size_t(*sizeof_type)();
  * size_t size_of();
  * bool spawnAt(void*);
  */
-extern "C" table_type getTable();
+extern "C" table_type getTable(void*(*)(ModType));
 
 /**
  * \brief returns the type of the module
